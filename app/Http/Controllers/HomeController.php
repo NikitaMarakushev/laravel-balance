@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\UserBalance;
+use App\Models\UserBalanceOperations;
+use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
@@ -20,16 +22,29 @@ class HomeController extends Controller
     /**
      * Show the application dashboard.
      *
-     * @return \Illuminate\Contracts\Support\Renderable
+     * @return Renderable
      */
     public function index()
     {
-        $user = Auth::user()->name;
+        $userId = Auth::user()->id;
+        $userName = Auth::user()->name;
+        $userBalance = UserBalance::query()
+            ->select('value', 'id')
+            ->where('user_id', $userId)
+            ->get()
+            ->first();
 
+        $userBalanceValue = $userBalance->value;
 
+        $operations = UserBalanceOperations::query()
+            ->where('user_balance_id', $userBalance->id)
+            ->orderBy('id', 'desc')
+            ->cursorPaginate(5);
 
         return view('home', [
-            'current_user' => $user
+            'current_user' => $userName,
+            'user_balance' => $userBalanceValue,
+            'operations' => $operations,
         ]);
     }
 }

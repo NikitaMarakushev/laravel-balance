@@ -11,6 +11,8 @@ class UserBalance extends Model
 {
     use HasFactory;
 
+    protected $table = "user_balance";
+
     public $timestamps = false;
 
     /**

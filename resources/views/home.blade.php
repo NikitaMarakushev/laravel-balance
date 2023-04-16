@@ -18,7 +18,29 @@
                 </div>
 
                 <div class="card-body">
-                    <h2>Баланс пользователя {{ $current_user }}</h2>
+                    <p>Примечение: баланс обновляется раз в сутки</p>
+                    <h2>Баланс пользователя {{ $current_user }}: {{ $user_balance }}</h2>
+
+                    <table class="table">
+                        <h2>Пять последних операций</h2>
+                        <thead>
+                        <tr>
+                            <th scope="col">Дата</th>
+                            <th scope="col">Тип</th>
+                            <th scope="col">Значение</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach($operations as $operation)
+                            <tr>
+                                <td>{{ $operation->date }}</td>
+                                <td>{{ $operation->type }}</td>
+                                <td>{{ $operation->value }}</td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                    {{ $operations->links() }}
                 </div>
             </div>
         </div>
