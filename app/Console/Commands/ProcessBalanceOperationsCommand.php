@@ -4,14 +4,14 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 
-class CarryingOutUserBalanceOpertaions extends Command
+class ProcessBalanceOperationsCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'command:name';
+    protected $signature = 'process:user_balance';
 
     /**
      * The console command description.

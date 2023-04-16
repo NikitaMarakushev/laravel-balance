@@ -16,7 +16,7 @@
                 </div>
 
                 <div class="card-body">
-                    <h2>Баланс пользователя {{ $current_user }}: {{ $user_balance }}</h2>
+                    <h3>Баланс пользователя {{ $current_user }}: {{ $user_balance }}</h3>
 
                     <table class="table">
                         <thead>
