@@ -9,4 +9,15 @@
 2) `sudo chmod -R guo+w storage`
 3) `php artisan cache:clear`
 
+Запуск:
+Запуск осуществляется последовательно: сначала поднимаются сервисы бекенда,
+после чего нужно вручную запустить фронт
+1) `./vendor/bin/sbin up`
+2) `npm install`
+3) `npm run dev`
+
+В бразуере нужно открыть http://localhost/login
+
+![img.png](img.png)
+
 
