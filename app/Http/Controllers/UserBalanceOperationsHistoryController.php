@@ -4,12 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\UserBalance;
 use App\Models\UserBalanceOperations;
-use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Support\Facades\Auth;
 
-class HomeController extends Controller
+class UserBalanceOperationsHistoryController extends Controller
 {
-    public const MAX_PER_PAGE = 5;
+    public const MAX_PER_PAGE_OPERATIONS_HISTORY = 15;
+
     /**
      * Create a new controller instance.
      *
@@ -20,11 +20,6 @@ class HomeController extends Controller
         $this->middleware('auth');
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return Renderable
-     */
     public function index()
     {
         $userId = Auth::user()->id;
@@ -40,10 +35,9 @@ class HomeController extends Controller
         $operations = UserBalanceOperations::query()
             ->where('user_balance_id', $userBalance->id)
             ->orderBy('id', 'desc')
-            ->take(self::MAX_PER_PAGE)
-            ->get();
+            ->cursorPaginate(self::MAX_PER_PAGE_OPERATIONS_HISTORY);
 
-        return view('home', [
+        return view('operations_history', [
             'current_user' => $userName,
             'user_balance' => $userBalanceValue,
             'operations' => $operations,
