@@ -49,12 +49,12 @@ class User extends Authenticatable
     /**
      * @var string
      */
-    private string $email;
+    private string $name;
 
     /**
      * @var string
      */
-    private string $phone;
+    private string $email;
 
     /**
      * @return BelongsTo
@@ -83,16 +83,16 @@ class User extends Authenticatable
     /**
      * @return string
      */
-    public function getPhone(): string
+    public function getName(): string
     {
-        return $this->phone;
+        return $this->name;
     }
 
     /**
-     * @param string $phone
+     * @param string $name
      */
-    public function setPhone(string $phone): void
+    public function setName(string $name): void
     {
-        $this->phone = $phone;
+        $this->name = $name;
     }
 }

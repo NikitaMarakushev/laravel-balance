@@ -17,10 +17,10 @@
 
                 <div class="card-body">
                     <p class="text-info">Примечение: баланс обновляется раз в сутки</p>
-                    <h2>Баланс пользователя {{ $current_user }}: {{ $user_balance }}</h2>
+                    <h2>Баланс пользователя {{ $current_user }}{{ $user_balance }}</h2>
 
                     <table class="table">
-                        <h2>Пять последних операций</h2>
+                        <h2>Пять последних операций (данные обновляются каждые 10 секунд)</h2>
                         <thead>
                         <tr>
                             <th scope="col">Дата</th>
@@ -28,9 +28,9 @@
                             <th scope="col">Значение</th>
                         </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="operations-table">
                         @foreach($operations as $operation)
-                            <tr>
+                            <tr id="operations-list">
                                 <td>{{ $operation->date }}</td>
                                 <td>{{ $operation->type }}</td>
                                 <td>{{ $operation->value }}</td>
@@ -43,4 +43,24 @@
         </div>
     </div>
 </div>
+<script type="module">
+    window.$(() => {
+        setInterval(function () {
+            $.ajax({
+                url: "{{ url('/operations_last') }}",
+                type: "POST",
+                data: {
+                    _token: '{{ csrf_token() }}'
+                },
+                dataType: 'json',
+                success: function (result) {
+                    $('#operations-table').empty();
+                    $.each(result, function (key, value) {
+                        $('#operations-table').append(`<tr id="operations-list"><td>${value.date}</td><td>${value.type}</td><td>${value.value}</td></tr>`)
+                    });
+                }
+            });
+        }, 10000)
+    });
+</script>
 @endsection

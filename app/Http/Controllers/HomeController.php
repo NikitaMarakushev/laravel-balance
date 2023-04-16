@@ -49,4 +49,22 @@ class HomeController extends Controller
             'operations' => $operations,
         ]);
     }
+
+    public function getOperations(): string
+    {
+        $userId = Auth::user()->id;
+        $userBalance = UserBalance::query()
+            ->select('value', 'id')
+            ->where('user_id', $userId)
+            ->get()
+            ->first();
+
+        $operations = UserBalanceOperations::query()
+            ->where('user_balance_id', $userBalance->id)
+            ->orderBy('id', 'desc')
+            ->take(self::MAX_PER_PAGE)
+            ->get();
+
+        return json_encode($operations);
+    }
 }
