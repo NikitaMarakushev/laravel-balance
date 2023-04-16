@@ -15,7 +15,11 @@ return new class extends Migration
     {
         Schema::create('user_balance_operations', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->integer('user_balance_id');
+            $table->foreign('user_balance_id')->references('id')->on('user_balance');
+            $table->timestamp('date')->nullable(false);
+            $table->string('type')->nullable(false);
+            $table->string('value')->nullable(false);
         });
     }
 

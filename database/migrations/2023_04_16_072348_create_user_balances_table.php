@@ -13,9 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('user_balances', function (Blueprint $table) {
+        Schema::create('user_balance', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->integer('user_id');
+            $table->string('value')->nullable(false);
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 
