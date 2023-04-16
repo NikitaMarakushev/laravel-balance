@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Dashboard') }}</div>
+                <div class="card-header">{{ __('Пять последних операций (данные обновляются каждые 10 секунд)') }}</div>
 
                 <div class="card-body">
                     @if (session('status'))
@@ -16,11 +16,9 @@
                 </div>
 
                 <div class="card-body">
-                    <p class="text-info">Примечение: баланс обновляется раз в сутки</p>
-                    <h2>Баланс пользователя {{ $current_user }}{{ $user_balance }}</h2>
+                    <h2>Баланс пользователя {{ $current_user }}: {{ $user_balance }}</h2>
 
                     <table class="table">
-                        <h2>Пять последних операций (данные обновляются каждые 10 секунд)</h2>
                         <thead>
                         <tr>
                             <th scope="col">Дата</th>

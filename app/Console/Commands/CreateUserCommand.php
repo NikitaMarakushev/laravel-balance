@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\User;
+use App\Models\UserBalance;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Hash;
 
@@ -54,6 +55,10 @@ class CreateUserCommand extends Command
                 'name' => $input['name'],
                 'email' => $input['email'],
                 'password' => Hash::make($input['password']),
+            ]);
+            $userBalance = UserBalance::create([
+                'user_id' => $user->id,
+                'value' => 0
             ]);
         } catch (\Exception $e) {
             $this->error($e->getMessage());
