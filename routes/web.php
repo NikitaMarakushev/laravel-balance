@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Api\V1\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -16,13 +15,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/home');
 });
-
-/** @TODO Реализовать rest api для пользователя, баланса, операций */
-Route::get('users/v1/list', [UserController::class, 'list'])->name('user.v1.list');
-Route::get('users/v1/get{user}', [UserController::class, 'getUser'])->name('user.v1.get');
-
 
 Auth::routes();
 

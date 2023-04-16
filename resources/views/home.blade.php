@@ -16,6 +16,10 @@
 
                     {{ __('You are logged in!') }}
                 </div>
+
+                <div class="card-body">
+                    <h2>Баланс пользователя {{ $current_user }}</h2>
+                </div>
             </div>
         </div>
     </div>
