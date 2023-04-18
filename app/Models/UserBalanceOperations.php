@@ -32,6 +32,11 @@ class UserBalanceOperations extends Model
     private string $value;
 
     /**
+     * @var string
+     */
+    private string $description;
+
+    /**
      * @return BelongsTo
      */
     public function userBalance(): BelongsTo
@@ -85,5 +90,21 @@ class UserBalanceOperations extends Model
     public function setValue(string $value): void
     {
         $this->value = $value;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string $description
+     */
+    public function setDescription(string $description): void
+    {
+        $this->description = $description;
     }
 }
