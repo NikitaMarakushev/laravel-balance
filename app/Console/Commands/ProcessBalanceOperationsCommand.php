@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Jobs\ProcessBalance;
 use Illuminate\Console\Command;
 
 class ProcessBalanceOperationsCommand extends Command
@@ -27,6 +28,7 @@ class ProcessBalanceOperationsCommand extends Command
      */
     public function handle()
     {
+        ProcessBalance::dispatch();
         return Command::SUCCESS;
     }
 }

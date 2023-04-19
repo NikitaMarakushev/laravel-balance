@@ -70,7 +70,6 @@ return [
             'block_for' => 5,
             'after_commit' => false,
         ],
-
     ],
 
     /*
@@ -89,5 +88,4 @@ return [
         'database' => env('DB_CONNECTION', 'mysql'),
         'table' => 'failed_jobs',
     ],
-
 ];
