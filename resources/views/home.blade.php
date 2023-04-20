@@ -44,7 +44,7 @@
             <div class="card mt-3">
                 <div class="card-header">{{ __('Изменение баланса') }}</div>
                 <div class="card-body">
-                    <form method="POST" action="{{ route('balance_change') }}">
+                    <form method="POST" action="{{ route('update_balance') }}">
                         @csrf
 
                         <div class="input-group mb-3">

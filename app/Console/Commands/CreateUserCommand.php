@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
+use App\DTO\UserDTO;
 use App\Models\User;
 use App\Models\UserBalance;
+use App\Services\UserService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\Console\Command\Command as CommandAlias;
@@ -17,7 +19,7 @@ class CreateUserCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'user:create {--u|username= : Username of the newly created user.} {--e|email= : E-Mail of the newly created user.}';
+    protected $signature = 'user:create';
 
     /**
      * The console command description.
@@ -26,6 +28,14 @@ class CreateUserCommand extends Command
      */
     protected $description = 'Create new user through CLI artisan';
 
+    private UserService $userService;
+
+    public function __construct(UserService $userService)
+    {
+        parent::__construct();
+        $this->userService = $userService;
+    }
+
     /**
      * Execute the console command.
      *
@@ -33,36 +43,20 @@ class CreateUserCommand extends Command
      */
     public function handle(): int
     {
-        $name = $this->option('username');
-        if ($name === null) {
-            $name = $this->ask('Please enter your username.');
-        }
-
-        $email = $this->option('email');
-        if ($email === null) {
-            $email = $this->ask('Please enter your E-Mail.');
-        }
-
+        $name = $this->ask('Please enter your username.');
+        $email = $this->ask('Please enter your E-Mail.');
         $password = $this->secret('Please enter a new password.');
         $password_confirmation = $this->secret('Please confirm the password');
 
-        $input = [
-            'name' => $name,
-            'email' => $email,
-            'password' => $password,
-            'password_confirmation' => $password_confirmation
-        ];
+        if ($password !== $password_confirmation) {
+            $this->error('Your passwords do not match!');
+            return CommandAlias::FAILURE;
+        }
+
+        $userDTO = new UserDTO($name, $email, $password);
 
         try {
-            $user = User::create([
-                'name' => $input['name'],
-                'email' => $input['email'],
-                'password' => Hash::make($input['password']),
-            ]);
-            $userBalance = UserBalance::create([
-                'user_id' => $user->id,
-                'value' => 0.0
-            ]);
+            $user = $this->userService->createUser($userDTO);
         } catch (\Exception $e) {
             $this->error($e->getMessage());
             return CommandAlias::FAILURE;

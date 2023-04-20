@@ -8,7 +8,7 @@ use App\Models\UserBalance;
 use App\Models\UserBalanceOperations;
 use Illuminate\Support\Facades\Auth;
 
-class UserBalanceOperationsHistoryController extends Controller
+class UserBalanceOperationsController extends Controller
 {
     public const MAX_PER_PAGE_OPERATIONS_HISTORY = 10;
 
@@ -21,7 +21,6 @@ class UserBalanceOperationsHistoryController extends Controller
     {
         $this->middleware('auth');
     }
-
 
     public function index()
     {

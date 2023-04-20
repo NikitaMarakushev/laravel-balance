@@ -15,7 +15,7 @@ class UserBalance extends Model
 
     protected $table = "user_balance";
 
-    protected $fillable = ['user_id', 'value', 'description'];
+    protected $fillable = ['user_id', 'value'];
 
     public $timestamps = false;
 

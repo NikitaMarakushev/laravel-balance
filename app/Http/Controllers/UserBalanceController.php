@@ -6,23 +6,17 @@ namespace App\Http\Controllers;
 
 use App\Jobs\ProcessBalance;
 use Illuminate\Http\Request;
-use InvalidArgumentException;
 
 class UserBalanceController extends Controller
 {
-    public function change(Request $request)
+    public function updateBalance(Request $request)
     {
-        if (!$request->user) {
-            throw new InvalidArgumentException("No 'user' param found");
-        }
-
-        if (!$request->value) {
-            throw new InvalidArgumentException("No 'value' param found");
-        }
-
-        if (!$request->type) {
-            throw new InvalidArgumentException("No 'type' param found");
-        }
+        $request->validate([
+            'user' => 'required',
+            'value' => 'required',
+            'type' => 'required',
+            'description' => 'required'
+        ]);
 
         ProcessBalance::dispatch($request->user, $request->value, $request->type, $request->description);
 

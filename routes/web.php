@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\UserBalanceController;
+use App\Http\Controllers\UserBalanceOperationsController;
 use App\Http\Controllers\UserBalanceOperationsHistoryController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -21,7 +24,7 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::post('/operations_last', [App\Http\Controllers\HomeController::class, 'getOperations'])->name('refresh_data_operations');
-Route::get('/operations_history', [UserBalanceOperationsHistoryController::class, 'index'])->name('operations_history');
-Route::post('/balance/change', [App\Http\Controllers\UserBalanceController::class, 'change'])->name('balance_change');
+Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::post('/operations_last', [HomeController::class, 'getOperations'])->name('refresh_data_operations');
+Route::get('/operations_history', [UserBalanceOperationsController::class, 'index'])->name('operations_history');
+Route::post('/balance/change', [UserBalanceController::class, 'updateBalance'])->name('update_balance');

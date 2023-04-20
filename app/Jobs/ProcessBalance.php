@@ -53,27 +53,24 @@ class ProcessBalance implements ShouldQueue
             switch ($this->type) {
                 case UserBalanceOperations::TYPE_INCREASE:
                     $userBalance->value = $userBalance->value + $this->value;
-                    $userBalance->save();
-                    DB::commit();
                     break;
                 case UserBalanceOperations::TYPE_DECREASE:
                     $userBalance->value = $userBalance->value - $this->value;
-                    $userBalance->save();
-                    DB::commit();
                     break;
                 default:
                     break;
             }
 
+            $userBalance->save();
+            /** @TODO Имеет смысл вынести отсюда */
             UserBalanceOperations::create([
                 'user_balance_id' => $userBalance->id,
                 'date' => new \DateTime(),
                 'type' => $this->type,
                 'value' => $this->value,
-                'completed_at' => new \DateTime(),
                 'description' => $this->description
             ])->save();
-
+            DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
             abort(500, "Ошибка при выполнении запроса", (array)$e->getMessage());

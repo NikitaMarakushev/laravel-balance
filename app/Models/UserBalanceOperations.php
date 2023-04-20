@@ -18,6 +18,8 @@ class UserBalanceOperations extends Model
 
     public $timestamps = false;
 
+    protected $fillable = ['user_balance_id', 'date', 'type', 'value', 'description'];
+
     /**
      * @var string
      */

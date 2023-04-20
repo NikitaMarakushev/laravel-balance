@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Console\Commands;
 
 use App\Jobs\ProcessBalance;
+use App\Models\UserBalanceOperations;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Command\Command as CommandAlias;
 
@@ -15,7 +16,7 @@ class ProcessBalanceCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'process:balance {user_id} {value} {type} {description}';
+    protected $signature = 'process:balance';
 
     /**
      * The console command description.
@@ -31,25 +32,16 @@ class ProcessBalanceCommand extends Command
      */
     public function handle(): int
     {
-        $user = $this->option('user_id');
-        if ($user === null) {
-            $user = $this->ask('Please enter your user_id.');
-        }
-        $value = $this->option('value');
-        if ($value === null) {
-            $value = $this->ask('Please enter your value.');
-        }
-        $type = $this->option('type');
-        if ($type === null) {
-            $type = $this->ask('Please enter your type.');
-        }
-        $description = $this->option('description');
-        if ($description === null) {
-            $description = $this->ask('Please enter your type.');
-        }
+        $user = $this->ask('Please enter your user_id.');
+        $value = $this->ask('Please enter your value.');
+        $type = $this->choice(
+            'Please chose your type',
+            [UserBalanceOperations::TYPE_INCREASE, UserBalanceOperations::TYPE_DECREASE]
+        );
+        $description = $this->ask('Please enter your description.');
 
         ProcessBalance::dispatch($user, $value, $type, $description);
-
+        $this->info('Balance processed successfully!');
         return CommandAlias::SUCCESS;
     }
 }
