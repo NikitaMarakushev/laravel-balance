@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Jobs\ProcessBalance;
+use App\Models\UserBalanceOperations;
 use Illuminate\Console\Command;
 
 class ProcessBalanceOperationsCommand extends Command
@@ -28,7 +29,20 @@ class ProcessBalanceOperationsCommand extends Command
      */
     public function handle()
     {
-        ProcessBalance::dispatch();
+        $count = UserBalanceOperations::count();
+        $chunkSize = 20;
+
+        $bar = $this->output->createProgressBar($count);
+
+        UserBalanceOperations::chunk($chunkSize, function ($rows) use ($bar) {
+           foreach ($rows as $row) {
+
+           }
+           $bar->advance(count($rows));
+        });
+
+        $bar->finish();
+
         return Command::SUCCESS;
     }
 }

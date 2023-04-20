@@ -24,3 +24,4 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::post('/operations_last', [App\Http\Controllers\HomeController::class, 'getOperations'])->name('refresh_data_operations');
 Route::get('/operations_history', [UserBalanceOperationsHistoryController::class, 'index'])->name('operations_history');
+Route::post('/balance/change', [App\Http\Controllers\UserBalanceController::class, 'change'])->name('balance_change');

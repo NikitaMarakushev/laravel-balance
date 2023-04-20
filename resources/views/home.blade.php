@@ -46,6 +46,39 @@
                     </table>
                 </div>
             </div>
+
+            <div class="card mt-3">
+                <div class="card-header">{{ __('Изменение баланса') }}</div>
+                <div class="card-body">
+                    <form method="POST" action="{{ route('balance_change') }}">
+                        @csrf
+
+                        <div class="input-group mb-3">
+                            <select class="form-control" id="sel1" name="type">
+                                <option value="increase">Увеличить</option>
+                                <option value="decrease">Уменьшить</option>
+                            </select>
+                        </div>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">$</span>
+                            </div>
+                            <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" min="0w" required name="value">
+                            <div class="input-group-append">
+                                <span class="input-group-text">.00</span>
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <label for="description"></label>
+                            <textarea class="form-control" id="description" name="description" rows="3" placeholder="Описание"></textarea>
+                        </div>
+                        <input type="hidden" name="user" value="{{ Auth::user()->id }}">
+                        <button type="submit" class="btn btn-danger">
+                            {{ __('Подтвердить операцию') }}
+                        </button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 </div>

@@ -2,8 +2,6 @@
 
 namespace App\Providers;
 
-use App\Models\UserBalance;
-use App\Observers\UserBalanceObserver;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
