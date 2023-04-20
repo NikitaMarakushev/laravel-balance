@@ -19,6 +19,7 @@
                         <thead>
                         <tr>
                             <th scope="col">Дата</th>
+                            <th scope="col">Описание</th>
                             <th scope="col">Тип</th>
                             <th scope="col">Значение</th>
                         </tr>
@@ -27,6 +28,7 @@
                         @foreach($operations as $operation)
                             <tr>
                                 <td>{{ $operation->date }}</td>
+                                <td>{{ $operation->description }}</td>
                                 <td>{{ $operation->type }}</td>
                                 <td>{{ $operation->value }}</td>
                             </tr>

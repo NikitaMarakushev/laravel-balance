@@ -28,8 +28,8 @@
                         <thead>
                             <tr>
                                 <th scope="col" style="cursor: pointer" data-type="string">Дата</th>
-                                <th scope="col">Тип</th>
                                 <th scope="col">Описание</th>
+                                <th scope="col">Тип</th>
                                 <th scope="col">Значение</th>
                             </tr>
                         </thead>
