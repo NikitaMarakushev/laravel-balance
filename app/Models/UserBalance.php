@@ -1,12 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Support\Facades\DB;
 
 class UserBalance extends Model
 {
@@ -14,7 +15,7 @@ class UserBalance extends Model
 
     protected $table = "user_balance";
 
-    protected $fillable = ['user_id', 'value'];
+    protected $fillable = ['user_id', 'value', 'description'];
 
     public $timestamps = false;
 

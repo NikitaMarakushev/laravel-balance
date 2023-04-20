@@ -18,12 +18,6 @@
                 <div class="card-body">
                     <h3>Баланс пользователя {{ $current_user }}: {{ $user_balance }}</h3>
 
-                    <div class="container">
-                        <div class="form-outline">
-                            <input type="search" id="operations-search" class="form-control" placeholder="Введите описание..." aria-label="Search" />
-                        </div>
-                    </div>
-
                     <table class="table" id="operations-table">
                         <thead>
                             <tr>
@@ -33,11 +27,11 @@
                                 <th scope="col">Значение</th>
                             </tr>
                         </thead>
-                        <tbody id="operations-table-body-body">
+                        <tbody id="operations-table-body">
                         @foreach($operations as $operation)
                             <tr id="operations-list">
                                 <td>{{ $operation->date }}</td>
-                                <td id="description-search">{{ $operation->description }}</td>
+                                <td>{{ $operation->description }}</td>
                                 <td>{{ $operation->type }}</td>
                                 <td>{{ $operation->value }}</td>
                             </tr>
@@ -54,19 +48,13 @@
                         @csrf
 
                         <div class="input-group mb-3">
-                            <select class="form-control" id="sel1" name="type">
+                            <select class="form-control" name="type">
                                 <option value="increase">Увеличить</option>
                                 <option value="decrease">Уменьшить</option>
                             </select>
                         </div>
                         <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">$</span>
-                            </div>
-                            <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" min="0w" required name="value">
-                            <div class="input-group-append">
-                                <span class="input-group-text">.00</span>
-                            </div>
+                            <input type="number" class="form-control" min="0w" required name="value">
                         </div>
                         <div class="input-group mb-3">
                             <label for="description"></label>
@@ -83,6 +71,7 @@
     </div>
 </div>
 <script type="module">
+    const refreshTimeout = 10000;
     window.$(() => {
         setInterval(function () {
             $.ajax({
@@ -95,79 +84,11 @@
                 success: function (result) {
                     $('#operations-table-body').empty();
                     $.each(result, function (key, value) {
-                        $('#operations-table-body').append(`<tr id="operations-list"><td>${value.date}</td><td>${value.type}</td><td>${value.value}</td></tr>`)
+                        $('#operations-table-body').append(`<tr id="operations-list"><td>${value.date}</td><td>${value.description}</td><td>${value.type}</td><td>${value.value}</td></tr>`);
                     });
                 }
             });
-        }, 10000)
-    });
-    $(document).ready(function(){
-        $("#operations-search").on("keyup", function() {
-            const value = $(this).val().toLowerCase();
-            $("#description-search").filter(function () {
-                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-            })
-        });
-    });
-    $(function() {
-        const tableHeaders = $("th");
-        let sortOrder = 1;
-
-        tableHeaders.on("click", function() {
-            const rows = sortRows(this);
-            rebuildTbody(rows);
-            updateClassName(this);
-            sortOrder *= -1;
-        })
-
-        function sortRows(tableHeaders) {
-            const rows = $.makeArray($('tbody > tr'));
-            const col = tableHeaders.cellIndex;
-            const type = tableHeaders.dataset.type;
-            rows.sort(function(a, b) {
-                return compare(a, b, col, type) * sortOrder;
-            });
-            return rows;
-        }
-
-        function compare(a, b, col, type) {
-            let _a = a.children[col].textContent;
-            let _b = b.children[col].textContent;
-            if (type === "number") {
-                _a *= 1;
-                _b *= 1;
-            } else if (type === "string") {
-                _a = _a.toLowerCase();
-                _b = _b.toLowerCase();
-            }
-
-            if (_a < _b) {
-                return -1;
-            }
-            if (_a > _b) {
-                return 1;
-            }
-            return 0;
-        }
-
-        function rebuildTbody(rows) {
-            const tbody = $("tbody");
-            while (tbody.firstChild) {
-                tbody.remove(tbody.firstChild);
-            }
-            let j;
-            for (j=0; j<rows.length; j++) {
-                tbody.append(rows[j]);
-            }
-        }
-
-        function updateClassName(tableHeaders) {
-            let k;
-            for (k=0; k < tableHeaders.length; k++) {
-                tableHeaders[k].className = "";
-            }
-            tableHeaders.className = sortOrder === 1 ? "asc" : "desc";
-        }
+        }, refreshTimeout)
     });
 </script>
 @endsection

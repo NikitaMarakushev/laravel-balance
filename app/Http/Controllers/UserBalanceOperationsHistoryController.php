@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Models\UserBalance;
@@ -8,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 
 class UserBalanceOperationsHistoryController extends Controller
 {
-    public const MAX_PER_PAGE_OPERATIONS_HISTORY = 15;
+    public const MAX_PER_PAGE_OPERATIONS_HISTORY = 10;
 
     /**
      * Create a new controller instance.
@@ -19,6 +21,7 @@ class UserBalanceOperationsHistoryController extends Controller
     {
         $this->middleware('auth');
     }
+
 
     public function index()
     {

@@ -1,9 +1,15 @@
 {
-    "name": "laravel/laravel",
+    "name": "NikitaMarakushev/laravel-balance",
     "type": "project",
-    "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
+    "description": "Simple module to work with user wallet",
     "license": "MIT",
+    "authors": [
+        {
+            "name": "NikitaMarakushev",
+            "email": "nikitamarakushev@yandex.ru",
+            "role": "Owner"
+        }
+    ],
     "require": {
         "php": "^8.0.2",
         "doctrine/dbal": "^3.6",

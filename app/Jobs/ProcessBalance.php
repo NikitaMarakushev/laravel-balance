@@ -1,12 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs;
 
-use App\Models\User;
 use App\Models\UserBalance;
 use App\Models\UserBalanceOperations;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
+use Illuminate\Bus\Queueable;;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -17,22 +17,26 @@ class ProcessBalance implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $id;
+    protected string $id;
 
-    protected $value;
+    protected float $value;
 
-    protected $type;
+    protected string $type;
+
+    protected string $description;
 
     /**
-     * Create a new job instance.
-     *
-     * @return void
+     * @param string $id
+     * @param float $value
+     * @param string $type
+     * @param string $description
      */
-    public function __construct($id, $value, $type)
+    public function __construct(string $id, float $value, string $type, string $description)
     {
         $this->id = $id;
         $this->value = $value;
         $this->type = $type;
+        $this->description = $description;
     }
 
     /**
@@ -42,7 +46,7 @@ class ProcessBalance implements ShouldQueue
      */
     public function handle()
     {
-        //DB::beginTransaction();
+        DB::beginTransaction();
 
         try {
             $userBalance = UserBalance::where('user_id', $this->id)->first();
@@ -50,18 +54,28 @@ class ProcessBalance implements ShouldQueue
                 case UserBalanceOperations::TYPE_INCREASE:
                     $userBalance->value = $userBalance->value + $this->value;
                     $userBalance->save();
-                    //DB::commit();
+                    DB::commit();
                     break;
                 case UserBalanceOperations::TYPE_DECREASE:
                     $userBalance->value = $userBalance->value - $this->value;
                     $userBalance->save();
-                    //DB::commit();
+                    DB::commit();
                     break;
                 default:
                     break;
             }
+
+            UserBalanceOperations::create([
+                'user_balance_id' => $userBalance->id,
+                'date' => new \DateTime(),
+                'type' => $this->type,
+                'value' => $this->value,
+                'completed_at' => new \DateTime(),
+                'description' => $this->description
+            ])->save();
+
         } catch (\Exception $e) {
-            //DB::rollBack();
+            DB::rollBack();
             abort(500, "Ошибка при выполнении запроса", (array)$e->getMessage());
         }
     }

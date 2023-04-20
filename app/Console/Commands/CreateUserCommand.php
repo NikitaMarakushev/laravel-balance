@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands;
 
 use App\Models\User;
 use App\Models\UserBalance;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Hash;
+use Symfony\Component\Console\Command\Command as CommandAlias;
 
 class CreateUserCommand extends Command
 {
@@ -26,9 +29,9 @@ class CreateUserCommand extends Command
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         $name = $this->option('username');
         if ($name === null) {
@@ -58,14 +61,15 @@ class CreateUserCommand extends Command
             ]);
             $userBalance = UserBalance::create([
                 'user_id' => $user->id,
-                'value' => 0
+                'value' => 0.0
             ]);
         } catch (\Exception $e) {
             $this->error($e->getMessage());
-            return;
+            return CommandAlias::FAILURE;
         }
 
         $this->info('User created successfully!');
         $this->info('New user id: ' . $user->id);
+        return CommandAlias::SUCCESS;
     }
 }

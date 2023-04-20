@@ -1,11 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Jobs\ProcessBalance;
-use App\Models\UserBalance;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use InvalidArgumentException;
 
 class UserBalanceController extends Controller
@@ -24,9 +24,7 @@ class UserBalanceController extends Controller
             throw new InvalidArgumentException("No 'type' param found");
         }
 
-        echo '<pre>';
-
-        ProcessBalance::dispatch($request->user, $request->value, $request->type);
+        ProcessBalance::dispatch($request->user, $request->value, $request->type, $request->description);
 
         return redirect('/home');
     }
