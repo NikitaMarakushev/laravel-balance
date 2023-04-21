@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\DTO\UserBalanceDTO;
 use App\Jobs\ProcessBalance;
 use Illuminate\Http\Request;
 
@@ -18,7 +19,14 @@ class UserBalanceController extends Controller
             'description' => 'required'
         ]);
 
-        ProcessBalance::dispatch($request->user, $request->value, $request->type, $request->description);
+        $userBalanceDTO = new UserBalanceDTO(
+            $request->user,
+            $request->value,
+            $request->type,
+            $request->description
+        );
+
+        ProcessBalance::dispatch($userBalanceDTO);
 
         return redirect('/home');
     }

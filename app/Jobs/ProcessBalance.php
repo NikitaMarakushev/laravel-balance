@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Jobs;
 
+use App\DTO\UserBalanceDTO;
 use App\Enum\UserBalanceOperationsEnum;
 use App\Models\UserBalance;
 use App\Models\UserBalanceOperations;
@@ -18,13 +19,10 @@ class ProcessBalance implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected string $id;
-
-    protected float $value;
-
-    protected string $type;
-
-    protected string $description;
+    /**
+     * @var UserBalanceDTO
+     */
+    protected UserBalanceDTO $userBalanceDTO;
 
     /**
      * @param string $id
@@ -32,12 +30,9 @@ class ProcessBalance implements ShouldQueue
      * @param string $type
      * @param string $description
      */
-    public function __construct(string $id, float $value, string $type, string $description)
+    public function __construct(UserBalanceDTO $userBalanceDTO)
     {
-        $this->id = $id;
-        $this->value = $value;
-        $this->type = $type;
-        $this->description = $description;
+        $this->userBalanceDTO = $userBalanceDTO;
     }
 
     /**
@@ -50,13 +45,13 @@ class ProcessBalance implements ShouldQueue
         DB::beginTransaction();
 
         try {
-            $userBalance = UserBalance::where('user_id', $this->id)->first();
-            switch ($this->type) {
+            $userBalance = UserBalance::where('user_id', $this->userBalanceDTO->getId())->first();
+            switch ($this->userBalanceDTO->getType()) {
                 case UserBalanceOperationsEnum::TYPE_INCREASE:
-                    $userBalance->value = $userBalance->value + $this->value;
+                    $userBalance->value = $userBalance->value + $this->userBalanceDTO->getValue();
                     break;
                 case UserBalanceOperationsEnum::TYPE_DECREASE:
-                    $userBalance->value = $userBalance->value - $this->value;
+                    $userBalance->value = $userBalance->value - $this->userBalanceDTO->getValue();
                     break;
                 default:
                     break;
@@ -67,9 +62,9 @@ class ProcessBalance implements ShouldQueue
             UserBalanceOperations::create([
                 'user_balance_id' => $userBalance->id,
                 'date' => new \DateTime(),
-                'type' => $this->type,
-                'value' => $this->value,
-                'description' => $this->description
+                'type' => $this->userBalanceDTO->getType(),
+                'value' => $this->userBalanceDTO->getValue(),
+                'description' => $this->userBalanceDTO->getDescription()
             ])->save();
             DB::commit();
         } catch (\Exception $e) {
