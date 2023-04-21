@@ -25,10 +25,7 @@ class ProcessBalance implements ShouldQueue
     protected UserBalanceDTO $userBalanceDTO;
 
     /**
-     * @param string $id
-     * @param float $value
-     * @param string $type
-     * @param string $description
+     * @param UserBalanceDTO $userBalanceDTO
      */
     public function __construct(UserBalanceDTO $userBalanceDTO)
     {
