@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Jobs;
 
+use App\Enum\UserBalanceOperationsEnum;
 use App\Models\UserBalance;
 use App\Models\UserBalanceOperations;
 use Illuminate\Bus\Queueable;;
@@ -51,10 +52,10 @@ class ProcessBalance implements ShouldQueue
         try {
             $userBalance = UserBalance::where('user_id', $this->id)->first();
             switch ($this->type) {
-                case UserBalanceOperations::TYPE_INCREASE:
+                case UserBalanceOperationsEnum::TYPE_INCREASE:
                     $userBalance->value = $userBalance->value + $this->value;
                     break;
-                case UserBalanceOperations::TYPE_DECREASE:
+                case UserBalanceOperationsEnum::TYPE_DECREASE:
                     $userBalance->value = $userBalance->value - $this->value;
                     break;
                 default:

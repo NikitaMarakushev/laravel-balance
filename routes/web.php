@@ -3,7 +3,6 @@
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserBalanceController;
 use App\Http\Controllers\UserBalanceOperationsController;
-use App\Http\Controllers\UserBalanceOperationsHistoryController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 

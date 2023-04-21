@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
+use App\Enum\UserBalanceOperationsEnum;
 use App\Jobs\ProcessBalance;
-use App\Models\UserBalanceOperations;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Command\Command as CommandAlias;
 
@@ -36,7 +36,7 @@ class ProcessBalanceCommand extends Command
         $value = $this->ask('Please enter your value.');
         $type = $this->choice(
             'Please chose your type',
-            [UserBalanceOperations::TYPE_INCREASE, UserBalanceOperations::TYPE_DECREASE]
+            [UserBalanceOperationsEnum::TYPE_INCREASE, UserBalanceOperationsEnum::TYPE_DECREASE]
         );
         $description = $this->ask('Please enter your description.');
 
