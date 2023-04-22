@@ -7,12 +7,9 @@
 3) `php artisan cache:clear`
 
 Запуск:
-Запуск осуществляется последовательно: сначала поднимаются сервисы бекенда,
-после чего нужно вручную запустить фронт
-1) `./vendor/bin/sbin up`
-2) `npm install`
-3) `npm run dev`
-
+Запуск осуществляется через команду 
+`docker compose up -d` или `docker-compose up -d`
+Предварительно на хост машине должен быть установлен docker и docker compose https://docs.docker.com/engine/install/ubuntu/
 В бразуере нужно открыть http://localhost
 
 ![img.png](img.png)
