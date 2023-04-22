@@ -17,7 +17,7 @@ return new class extends Migration
         Schema::create('user_balance', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id');
-            $table->string('value')->nullable(false);
+            $table->float('value')->nullable(false);
             $table->foreign('user_id')->references('id')->on('users');
         });
         DB::unprepared("
