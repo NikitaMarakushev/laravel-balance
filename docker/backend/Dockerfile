@@ -28,4 +28,4 @@ USER www
 
 EXPOSE 9000
 
-CMD ["sh", "-c", "composer install && php artisan migrate && php-fpm"]
+CMD ["sh", "-c", "composer install && php artisan migrate && php artisan queue:work && php-fpm"]
