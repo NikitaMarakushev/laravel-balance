@@ -9,6 +9,7 @@ use App\Enum\UserBalanceOperationsEnum;
 use App\Jobs\ProcessBalance;
 use App\Services\UserBalanceService;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\Console\Command\Command as CommandAlias;
 
 class ProcessBalanceCommand extends Command
@@ -61,7 +62,17 @@ class ProcessBalanceCommand extends Command
             $type,
             $description
         );
-        ProcessBalance::dispatch($userBalanceDTO, $this->userBalanceService);
+
+        try {
+            DB::beginTransaction();
+            ProcessBalance::dispatch($userBalanceDTO, $this->userBalanceService);
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            $this->error($e->getMessage());
+            return CommandAlias::FAILURE;
+        }
+
         $this->info('The job to change the balance was successfully sent to the queue!');
         return CommandAlias::SUCCESS;
     }
