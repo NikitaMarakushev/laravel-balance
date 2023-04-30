@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Domain\BalanceCalculator;
 use App\DTO\UserBalanceDTO;
-use App\Enum\UserBalanceOperationsEnum;
 use App\Exceptions\NegativeBalanceException;
 use App\Models\UserBalance;
 use App\Models\UserBalanceOperations;
@@ -25,21 +25,13 @@ class UserBalanceService
             ->lockForUpdate()
             ->first();
 
-        switch ($userBalanceDTO->getType()) {
-            case UserBalanceOperationsEnum::TYPE_INCREASE:
-                $userBalance->value = $userBalance->value + $userBalanceDTO->getValue();
-                break;
-            case UserBalanceOperationsEnum::TYPE_DECREASE:
-                $userBalance->value = $userBalance->value - $userBalanceDTO->getValue();
-                break;
-            default:
-                break;
-        }
+        $calculationResult = (new BalanceCalculator($userBalanceDTO, $userBalance->value))->calculate();
 
-        if ($userBalance->value < 0) {
+        if ($calculationResult < 0) {
             throw new NegativeBalanceException("User balance can not be negative!");
         }
 
+        $userBalance->value = $calculationResult;
         $userBalance->save();
 
         UserBalanceOperations::create([

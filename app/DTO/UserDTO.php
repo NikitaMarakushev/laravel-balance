@@ -6,6 +6,11 @@ namespace App\DTO;
 
 class UserDTO
 {
+    /**
+     * @param string $name
+     * @param string $email
+     * @param string $password
+     */
     public function __construct(
         private string $name,
         private string $email,
