@@ -7,6 +7,7 @@ namespace App\Console\Commands;
 use App\DTO\UserBalanceDTO;
 use App\Enum\UserBalanceOperationsEnum;
 use App\Jobs\ProcessBalance;
+use App\Services\UserBalanceService;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Command\Command as CommandAlias;
 
@@ -25,6 +26,20 @@ class ProcessBalanceCommand extends Command
      * @var string
      */
     protected $description = 'Run the ProcessBalance job for update balance of user';
+
+    /**
+     * @var UserBalanceService
+     */
+    private UserBalanceService $userBalanceService;
+
+    /**
+     * @param UserBalanceService $userBalanceService
+     */
+    public function __construct(UserBalanceService $userBalanceService)
+    {
+        parent::__construct();
+        $this->userBalanceService = $userBalanceService;
+    }
 
     /**
      * Execute the console command.
@@ -46,7 +61,7 @@ class ProcessBalanceCommand extends Command
             $type,
             $description
         );
-        ProcessBalance::dispatch($userBalanceDTO);
+        ProcessBalance::dispatch($userBalanceDTO, $this->userBalanceService);
         $this->info('The job to change the balance was successfully sent to the queue!');
         return CommandAlias::SUCCESS;
     }

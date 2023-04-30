@@ -5,11 +5,8 @@ declare(strict_types=1);
 namespace App\Console\Commands;
 
 use App\DTO\UserDTO;
-use App\Models\User;
-use App\Models\UserBalance;
 use App\Services\UserService;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Hash;
 use Symfony\Component\Console\Command\Command as CommandAlias;
 
 class CreateUserCommand extends Command
@@ -28,8 +25,14 @@ class CreateUserCommand extends Command
      */
     protected $description = 'Create new user through CLI artisan';
 
+    /**
+     * @var UserService
+     */
     private UserService $userService;
 
+    /**
+     * @param UserService $userService
+     */
     public function __construct(UserService $userService)
     {
         parent::__construct();
