@@ -6,6 +6,7 @@ namespace App\Services;
 
 use App\DTO\UserBalanceDTO;
 use App\Enum\UserBalanceOperationsEnum;
+use App\Exceptions\NegativeBalanceException;
 use App\Models\UserBalance;
 use App\Models\UserBalanceOperations;
 
@@ -14,13 +15,13 @@ class UserBalanceService
     /**
      * @param UserBalanceDTO $userBalanceDTO
      * @return void
+     * @throws NegativeBalanceException
      */
     public function processBalance(UserBalanceDTO $userBalanceDTO): void
     {
         $userBalance = UserBalance::where('email', $userBalanceDTO->getUserLogin())
             ->select()
             ->join('users', 'users.id', '=', 'user_balance.user_id')
-            ->where('email', $userBalanceDTO->getUserLogin())
             ->lockForUpdate()
             ->first();
 
@@ -33,6 +34,10 @@ class UserBalanceService
                 break;
             default:
                 break;
+        }
+
+        if ($userBalance->value < 0) {
+            throw new NegativeBalanceException("User balance can not be negative!");
         }
 
         $userBalance->save();

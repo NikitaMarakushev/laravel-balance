@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Jobs;
 
 use App\DTO\UserBalanceDTO;
+use App\Exceptions\NegativeBalanceException;
 use App\Services\UserBalanceService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -40,8 +41,9 @@ class ProcessBalance implements ShouldQueue
      * Execute the job.
      *
      * @return void
+     * @throws NegativeBalanceException
      */
-    public function handle()
+    public function handle(): void
     {
         $this->userBalanceService->processBalance($this->userBalanceDTO);
     }
