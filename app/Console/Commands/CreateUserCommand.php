@@ -49,9 +49,9 @@ class CreateUserCommand extends Command
         $name = $this->ask('Please enter your username.');
         $email = $this->ask('Please enter your E-Mail.');
         $password = $this->secret('Please enter a new password.');
-        $password_confirmation = $this->secret('Please confirm the password');
+        $passwordConfirmation = $this->secret('Please confirm the password');
 
-        if ($password !== $password_confirmation) {
+        if ($password !== $passwordConfirmation) {
             $this->error('Your passwords do not match!');
             return CommandAlias::FAILURE;
         }
