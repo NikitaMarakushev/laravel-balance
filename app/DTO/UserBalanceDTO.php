@@ -6,20 +6,18 @@ namespace App\DTO;
 
 class UserBalanceDTO
 {
+    /**
+     * @param string $userLogin
+     * @param float $value
+     * @param string $type
+     * @param string $description
+     */
     public function __construct(
-        private string $id,
+        private string $userLogin,
         private float $value,
         private string $type,
         private string $description
     ) {}
-
-    /**
-     * @return string
-     */
-    public function getId(): string
-    {
-        return $this->id;
-    }
 
     /**
      * @return float
@@ -43,5 +41,13 @@ class UserBalanceDTO
     public function getDescription(): string
     {
         return $this->description;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUserLogin(): string
+    {
+        return $this->userLogin;
     }
 }

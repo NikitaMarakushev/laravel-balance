@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
+use App\DTO\UserBalanceDTO;
 use App\Enum\UserBalanceOperationsEnum;
 use App\Jobs\ProcessBalance;
 use Illuminate\Console\Command;
@@ -32,16 +33,21 @@ class ProcessBalanceCommand extends Command
      */
     public function handle(): int
     {
-        $user = $this->ask('Please enter your user_id.');
-        $value = $this->ask('Please enter your value.');
+        $userLogin = $this->ask('Please enter your login');
+        $value = $this->ask('Please enter your value');
         $type = $this->choice(
             'Please chose your type',
             [UserBalanceOperationsEnum::TYPE_INCREASE, UserBalanceOperationsEnum::TYPE_DECREASE]
         );
-        $description = $this->ask('Please enter your description.');
-
-        ProcessBalance::dispatch($user, $value, $type, $description);
-        $this->info('Balance processed successfully!');
+        $description = $this->ask('Please enter your description');
+        $userBalanceDTO = new UserBalanceDTO(
+            $userLogin,
+            (float)$value,
+            $type,
+            $description
+        );
+        ProcessBalance::dispatch($userBalanceDTO);
+        $this->info('The job to change the balance was successfully sent to the queue!');
         return CommandAlias::SUCCESS;
     }
 }

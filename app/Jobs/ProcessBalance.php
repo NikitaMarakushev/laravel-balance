@@ -8,7 +8,7 @@ use App\DTO\UserBalanceDTO;
 use App\Enum\UserBalanceOperationsEnum;
 use App\Models\UserBalance;
 use App\Models\UserBalanceOperations;
-use Illuminate\Bus\Queueable;;
+use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -42,7 +42,7 @@ class ProcessBalance implements ShouldQueue
         DB::beginTransaction();
 
         try {
-            $userBalance = UserBalance::where('user_id', $this->userBalanceDTO->getId())->first();
+            $userBalance = UserBalance::where('email', $this->userBalanceDTO->getUserLogin())->first();
             switch ($this->userBalanceDTO->getType()) {
                 case UserBalanceOperationsEnum::TYPE_INCREASE:
                     $userBalance->value = $userBalance->value + $this->userBalanceDTO->getValue();
