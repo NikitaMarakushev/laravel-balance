@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Factories;
 
-use App\Domain\CalculatorInterface;
+use App\Domain\Calculator\CalculatorInterface;
 
 interface FactoryInterface
 {

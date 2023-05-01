@@ -2,7 +2,10 @@
 
 namespace App\Providers;
 
+use App\Domain\Validator\BalanceCalculatorValidator;
 use App\Factories\BalanceCalculatorFactory;
+use App\Repositories\UserBalanceOperationsRepository;
+use App\Repositories\UserBalanceRepository;
 use App\Services\UserBalanceService;
 use Illuminate\Support\ServiceProvider;
 
@@ -16,7 +19,12 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(UserBalanceService::class, function ($app) {
-            return new UserBalanceService(new BalanceCalculatorFactory());
+            return new UserBalanceService(
+                new BalanceCalculatorFactory(),
+                new UserBalanceRepository(),
+                new UserBalanceOperationsRepository(),
+                new BalanceCalculatorValidator()
+            );
         });
     }
 
