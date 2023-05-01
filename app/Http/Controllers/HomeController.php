@@ -4,21 +4,22 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Models\UserBalance;
-use App\Models\UserBalanceOperations;
+use App\Repositories\UserBalanceOperationsRepository;
+use App\Repositories\UserBalanceRepository;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
-    public const MAX_PER_PAGE = 5;
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
-    {
+    public function __construct(
+        private UserBalanceRepository $userBalanceRepository,
+        private UserBalanceOperationsRepository $userBalanceOperationsRepository
+    ) {
         $this->middleware('auth');
     }
 
@@ -29,44 +30,22 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $userId = Auth::user()->id;
-        $userName = Auth::user()->name;
-        $userBalance = UserBalance::query()
-            ->select('value', 'id')
-            ->where('user_id', $userId)
-            ->get()
-            ->first();
-
-        $userBalanceValue = $userBalance->value;
-
-        $operations = UserBalanceOperations::query()
-            ->where('user_balance_id', $userBalance->id)
-            ->orderBy('id', 'desc')
-            ->take(self::MAX_PER_PAGE)
-            ->get();
+        $userBalance = $this->userBalanceRepository->getUserBalanceById(Auth::user()->id);
+        $operations = $this->userBalanceOperationsRepository->getOperations($userBalance->id);
 
         return view('home', [
-            'current_user' => $userName,
-            'user_balance' => $userBalanceValue,
+            'current_user' => Auth::user()->name,
+            'user_balance' => $userBalance->value,
             'operations' => $operations,
         ]);
     }
 
+    /**
+     * @return string
+     */
     public function getOperations(): string
     {
-        $userId = Auth::user()->id;
-        $userBalance = UserBalance::query()
-            ->select('value', 'id')
-            ->where('user_id', $userId)
-            ->get()
-            ->first();
-
-        $operations = UserBalanceOperations::query()
-            ->where('user_balance_id', $userBalance->id)
-            ->orderBy('id', 'desc')
-            ->take(self::MAX_PER_PAGE)
-            ->get();
-
-        return json_encode($operations);
+        $userBalance = $this->userBalanceRepository->getUserBalanceById(Auth::user()->id);
+        return json_encode($this->userBalanceOperationsRepository->getOperations($userBalance));
     }
 }
