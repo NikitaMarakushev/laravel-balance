@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Exceptions;
 
-class NegativeBalanceException extends \Exception
+use Exception;
+
+class NegativeBalanceException extends Exception
 {
 }

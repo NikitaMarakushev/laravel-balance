@@ -26,17 +26,12 @@ class CreateUserCommand extends Command
     protected $description = 'Create new user through CLI artisan';
 
     /**
-     * @var UserService
-     */
-    private UserService $userService;
-
-    /**
      * @param UserService $userService
      */
-    public function __construct(UserService $userService)
-    {
+    public function __construct(
+        private UserService $userService
+    ) {
         parent::__construct();
-        $this->userService = $userService;
     }
 
     /**

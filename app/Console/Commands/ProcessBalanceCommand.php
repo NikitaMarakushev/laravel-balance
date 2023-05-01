@@ -29,17 +29,12 @@ class ProcessBalanceCommand extends Command
     protected $description = 'Run the ProcessBalance job for update balance of user';
 
     /**
-     * @var UserBalanceService
-     */
-    private UserBalanceService $userBalanceService;
-
-    /**
      * @param UserBalanceService $userBalanceService
      */
-    public function __construct(UserBalanceService $userBalanceService)
-    {
+    public function __construct(
+        private UserBalanceService $userBalanceService
+    ) {
         parent::__construct();
-        $this->userBalanceService = $userBalanceService;
     }
 
     /**

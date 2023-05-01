@@ -4,14 +4,18 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Domain\BalanceCalculator;
 use App\DTO\UserBalanceDTO;
 use App\Exceptions\NegativeBalanceException;
+use App\Factories\FactoryInterface;
 use App\Models\UserBalance;
 use App\Models\UserBalanceOperations;
 
 class UserBalanceService
 {
+    public function __construct(
+        private FactoryInterface $factory
+    ) {}
+
     /**
      * @param UserBalanceDTO $userBalanceDTO
      * @return void
@@ -25,7 +29,9 @@ class UserBalanceService
             ->lockForUpdate()
             ->first();
 
-        $calculationResult = (new BalanceCalculator($userBalanceDTO, $userBalance->value))->calculate();
+        $calculationResult = $this->factory->create()->calculate(
+            (float)$userBalance->value, $userBalanceDTO->getValue(), $userBalanceDTO->getType()
+        );
 
         if ($calculationResult < 0) {
             throw new NegativeBalanceException("User balance can not be negative!");

@@ -6,6 +6,7 @@ namespace App\Jobs;
 
 use App\DTO\UserBalanceDTO;
 use App\Exceptions\NegativeBalanceException;
+use App\Factories\BalanceCalculatorFactory;
 use App\Services\UserBalanceService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -18,24 +19,13 @@ class ProcessBalance implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
-     * @var UserBalanceDTO
-     */
-    protected UserBalanceDTO $userBalanceDTO;
-
-    /**
-     * @var UserBalanceService
-     */
-    protected UserBalanceService $userBalanceService;
-
-    /**
      * @param UserBalanceDTO $userBalanceDTO
      * @param UserBalanceService $userBalanceService
      */
-    public function __construct(UserBalanceDTO $userBalanceDTO, UserBalanceService $userBalanceService)
-    {
-        $this->userBalanceDTO = $userBalanceDTO;
-        $this->userBalanceService = $userBalanceService;
-    }
+    public function __construct(
+        protected UserBalanceDTO $userBalanceDTO,
+        protected UserBalanceService $userBalanceService
+    ) {}
 
     /**
      * Execute the job.

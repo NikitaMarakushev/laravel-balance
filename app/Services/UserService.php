@@ -5,15 +5,13 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\DTO\UserDTO;
+use App\Enum\UserBalanceEnum;
 use App\Models\User;
 use App\Models\UserBalance;
 use Illuminate\Support\Facades\Hash;
 
 class UserService
 {
-    //@TODO Вынести константу из сервис и подумать на default value для колонки
-    public const DEFAULT_BALANCE = 0.0;
-
     /**
      * @param UserDTO $userDTO
      * @return User
@@ -28,7 +26,7 @@ class UserService
         $user->save();
         UserBalance::create([
             'user_id' => $user->id,
-            'value' => self::DEFAULT_BALANCE
+            'value' => UserBalanceEnum::DEFAULT_BALANCE
         ])->save();
 
         return $user;
