@@ -8,4 +8,5 @@ use Exception;
 
 class NegativeBalanceException extends Exception
 {
+    protected $message = "User balance can not be negative!";
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Repositories;
 
 use App\Enum\UserBalanceEnum;
+use App\Exceptions\NoSuchUserException;
 use App\Models\UserBalance;
 
 class UserBalanceRepository
@@ -41,14 +42,21 @@ class UserBalanceRepository
     /**
      * @param string $email
      * @return UserBalance
+     * @throws NoSuchUserException
      */
     public function getUserBalanceByEmail(string $email): UserBalance
     {
-        return UserBalance::where('email', $email)
+        $userBalance = UserBalance::where('email', $email)
             ->select()
             ->join('users', 'users.id', '=', 'user_balance.user_id')
             ->lockForUpdate()
             ->first();
+
+        if (is_null($userBalance)) {
+            throw new NoSuchUserException();
+        }
+
+        return $userBalance;
     }
 
     /**

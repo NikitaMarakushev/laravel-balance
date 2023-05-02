@@ -7,6 +7,7 @@ namespace App\Services;
 use App\Domain\Validator\BalanceCalculatorValidator;
 use App\DTO\UserBalanceDTO;
 use App\Exceptions\NegativeBalanceException;
+use App\Exceptions\NoSuchUserException;
 use App\Factories\FactoryInterface;
 use App\Repositories\UserBalanceOperationsRepository;
 use App\Repositories\UserBalanceRepository;
@@ -24,12 +25,13 @@ class UserBalanceService
      * @param UserBalanceDTO $userBalanceDTO
      * @return void
      * @throws NegativeBalanceException
+     * @throws NoSuchUserException
      */
     public function processBalance(UserBalanceDTO $userBalanceDTO): void
     {
-        $userBalance = $this->userBalanceRepository->getUserBalanceByEmail($userBalanceDTO->getUserLogin());
+        $userBalance = $this->userBalanceRepository->getUserBalanceByEmail($userBalanceDTO->getUserEmail());
         $calculationResult = $this->factory->create()->calculate(
-            (float)$userBalance->value, $userBalanceDTO->getValue(), $userBalanceDTO->getType()
+            (float) $userBalance->value, $userBalanceDTO->getValue(), $userBalanceDTO->getType()
         );
         $this->balanceCalculatorValidator->validate($calculationResult);
         $this->userBalanceRepository->updateBalance($userBalance, $calculationResult);

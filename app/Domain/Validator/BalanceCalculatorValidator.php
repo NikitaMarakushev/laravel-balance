@@ -16,7 +16,7 @@ class BalanceCalculatorValidator
     public function validate(float $calculationResult): void
     {
         if ($calculationResult < 0) {
-            throw new NegativeBalanceException("User balance can not be negative!");
+            throw new NegativeBalanceException();
         }
     }
 }

@@ -6,7 +6,7 @@ namespace App\Jobs;
 
 use App\DTO\UserBalanceDTO;
 use App\Exceptions\NegativeBalanceException;
-use App\Factories\BalanceCalculatorFactory;
+use App\Exceptions\NoSuchUserException;
 use App\Services\UserBalanceService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -32,6 +32,7 @@ class ProcessBalance implements ShouldQueue
      *
      * @return void
      * @throws NegativeBalanceException
+     * @throws NoSuchUserException
      */
     public function handle(): void
     {
