@@ -12,6 +12,8 @@ services:
             - ./docker/backend/php.ini:/usr/local/etc/php/php.ini
         depends_on:
             - database
+        networks:
+            - balance-network
 
     nginx:
         image: nginx:alpine
@@ -24,6 +26,8 @@ services:
             - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
         depends_on:
             - backend
+        networks:
+            - balance-network
 
     database:
         image: 'postgres:14'
@@ -47,6 +51,8 @@ services:
                 - '${DB_USERNAME}'
             retries: 3
             timeout: 5s
+        networks:
+            - balance-network
 
     frontend:
         build:
@@ -58,7 +64,13 @@ services:
         working_dir: /var/www
         volumes:
             - .:/var/www
+        networks:
+            - balance-network
 
 volumes:
     database-pgsql:
         driver: local
+
+networks:
+  balance-network:
+    driver: bridge

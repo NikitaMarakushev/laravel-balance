@@ -5,6 +5,14 @@
 ![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white)
 ![jQuery](https://img.shields.io/badge/jquery-%230769AD.svg?style=for-the-badge&logo=jquery&logoColor=white)
 
+Системные требования:
+1) Наличие docker и docker compose (установленных в соответствии с официальной документацией, пример для ubuntu: https://docs.docker.com/engine/install/ubuntu/)
+
+Установка проекта:
+1) Клонировать любым удобным способом репозиторий себе на машину
+2) По примеру .env.example реализовать .env под свои нужны
+3) запустить `docker compose up -d`
+
 Потенциальную проблему с доступам к файлам внутри смонитрованного каталога storage можно решить через команды
 
 <h1>Команды ниже выполнять на host машине без перезапуска контейнеров</h1>
@@ -17,10 +25,6 @@
 это ключ вашего приложения и если его нет, сгенерировать его можно через команду
 `php artisan key:generate`
 
-Запуск:
-Запуск осуществляется через команду 
-`docker compose up -d` или `docker-compose up -d`
-Предварительно на хост машине должен быть установлен docker и docker compose https://docs.docker.com/engine/install/ubuntu/
 В бразуере нужно открыть http://localhost
 
 ![img.png](img.png)
