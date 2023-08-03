@@ -46,6 +46,6 @@ class HomeController extends Controller
     public function getOperations(): string
     {
         $userBalance = $this->userBalanceRepository->getUserBalanceById(Auth::user()->id);
-        return json_encode($this->userBalanceOperationsRepository->getOperations($userBalance));
+        return json_encode($this->userBalanceOperationsRepository->getOperations($userBalance->id));
     }
 }
